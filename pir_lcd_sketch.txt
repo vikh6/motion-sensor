@@ -1,0 +1,35 @@
+#include <LiquidCrystal.h>
+
+// LCD pins, change if wired elsewhere
+const int rs = 7, en = 8, d4 = 9, d5 = 10, d6 = 11, d7 = 12;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+const int pirPin = 2;       // PIR signal pin, change if wired elsewhere
+int pirState = LOW;
+
+void setup() {
+  pinMode(pirPin, INPUT);
+  lcd.begin(16, 2);
+  lcd.print("Waiting...");
+}
+
+void loop() {
+  int motion = digitalRead(pirPin);
+
+  if (motion == HIGH && pirState == LOW) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Motion");
+    lcd.setCursor(0, 1);
+    lcd.print("Detected!");
+    pirState = HIGH;
+  } 
+  else if (motion == LOW && pirState == HIGH) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("No Motion");
+    pirState = LOW;
+  }
+
+  delay(100);
+}
